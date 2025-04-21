@@ -4,11 +4,11 @@ import { ThemeProvider as NextThemesProvider, ThemeProviderProps } from 'next-th
 import React from 'react'
 
 const ThemeProvider = ({ children, ...props }: ThemeProviderProps) => {
-    return (
-        <NextThemesProvider {...props}>
-            {children}
-        </NextThemesProvider>
-    )
-    }
+  return (
+    <NextThemesProvider {...props}>
+      {children}
+    </NextThemesProvider>
+  )
+  }
 
 export default ThemeProvider
