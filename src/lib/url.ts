@@ -35,5 +35,3 @@ export const removeKeyFromUrlQuery = ({ params, keysToRemove }: RemoveUrlQueryPa
     }, { skipNull: true });
         
 };
-
-export const removeKeysFromQuery = () => {};

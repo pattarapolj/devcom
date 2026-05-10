@@ -1,5 +1,6 @@
 import Link from "next/link";
 
+import HomeFilter from "@/components/filter/HomeFilter";
 import LocalSearch from "@/components/search/LocalSearch";
 import { Button } from "@/components/ui/button";
 import ROUTES from "@/constants/routes";
@@ -14,7 +15,7 @@ import ROUTES from "@/constants/routes";
     },
     {_id: "2", title: "What is the best way to deploy a Next.js app?", 
       description: "I want to deploy my Next.js app and need guidance on the best practices.", 
-      tags: [ {_id: "3", name: "Deployment" }, { _id: "1", name: "Next.js" } ], 
+      tags: [ {_id: "3", name: "Deployment" }, ], 
       author: { _id: "2", name: "Jane Smith"}, 
       createdAt: "2024-09-02T12:00:00.000Z",
       upvotes: 5,
@@ -50,9 +51,14 @@ import ROUTES from "@/constants/routes";
 
 const Home = async ({ searchParams }: SearchParams ) => {
 
-  const { query = "" } = await searchParams;
+  const { query = "", filter = "" } = await searchParams;
 
-  const filteredQuestions = questions.filter((question) => question.title.toLowerCase().includes(query?.toLowerCase()));
+  const filteredQuestions = questions.filter((
+    question) => 
+      question.title.toLowerCase().includes(query?.toLowerCase()) &&
+      (filter ? question.tags.some(tag => tag.name.toLowerCase() === filter.toLowerCase())
+        : true)
+  );
 
   return (
     <>
@@ -72,7 +78,7 @@ const Home = async ({ searchParams }: SearchParams ) => {
           otherClasses="flex-1"
         />
       </section>
-      {/* HomeFilter */}
+      <HomeFilter />
       <div className="mt-10 flex w-full flex-col gap-6">
         {filteredQuestions.map((question) => (
           <div key={question._id} className="rounded-lg border p-4">

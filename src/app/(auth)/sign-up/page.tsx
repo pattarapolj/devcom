@@ -12,7 +12,7 @@ const SignUp = () => {
                 schema={SignUpSchema}
                 defaultValues={{ email: "", password: "", name: "", username: "" }}
                 onSubmit={(data) => {
-                        Promise.resolve({ success: true, data })
+                        return Promise.resolve({ success: true, data })
                 }}
             />
     )
