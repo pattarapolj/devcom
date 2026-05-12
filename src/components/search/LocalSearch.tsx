@@ -23,12 +23,13 @@ const LocalSearch = ({ route, imgSrc, placeholder, otherClasses }: Props) => {
 
   const [searchQuery, setSearchQuery] = useState(query);
 
+  const searchParamsStr = searchParams.toString();
   useEffect(() => {
     const delayDebounce = setTimeout(() => {
       // Update the search query in the URL when it changes
       if (searchQuery) {
         const newUrl = formUrlQuery({
-          params: searchParams.toString(),
+          params: searchParamsStr,
           key: 'query',
           value: searchQuery,
         })
@@ -38,7 +39,7 @@ const LocalSearch = ({ route, imgSrc, placeholder, otherClasses }: Props) => {
         console.log(route, pathname)
         if (pathname === route) {
           const newUrl = removeKeyFromUrlQuery({
-            params: searchParams.toString(),
+            params: searchParamsStr,
             keysToRemove: ['query'],
           })
           router.push(newUrl, { scroll: false });
@@ -48,7 +49,7 @@ const LocalSearch = ({ route, imgSrc, placeholder, otherClasses }: Props) => {
     
     return () => clearTimeout(delayDebounce);
 
-  }, [searchQuery, router, route, searchParams, pathname]);
+  }, [searchQuery, router, route, searchParamsStr, pathname]);
   
   return (
     <div className={`background-light800_darkgradient flex min-h-[56px] grow items-center gap-4 rounded-[10px] px-4 ${otherClasses}`}>
