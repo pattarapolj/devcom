@@ -4,6 +4,9 @@ import HomeFilter from "@/components/filter/HomeFilter";
 import LocalSearch from "@/components/search/LocalSearch";
 import { Button } from "@/components/ui/button";
 import ROUTES from "@/constants/routes";
+import handleError from "@/lib/handlers/error";
+import { ValidationError } from "@/lib/htpp-error";
+
   const questions = [
     {_id: "1", title: "How to learn Next.js?", description: "I am new to Next.js and would like to know the best resources to learn it.", 
       tags: [ {_id: "1", name: "Next.js" }, { _id: "2", name: "JavaScript" } ], 
@@ -49,7 +52,19 @@ import ROUTES from "@/constants/routes";
     searchParams: Promise<{[key: string]: string}>;
   }
 
+  const test = async () => {
+    try {
+      throw new ValidationError({
+        title: ["Required"],
+        tags: ['"JavaScript is not a valid tag."']
+      })
+    } catch (err) {
+      return handleError(err);
+    }
+  }
+
 const Home = async ({ searchParams }: SearchParams ) => {
+  // test()
 
   const { query = "", filter = "" } = await searchParams;
 
