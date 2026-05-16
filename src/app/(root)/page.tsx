@@ -1,17 +1,18 @@
 import Link from "next/link";
 
+import QuestionCard from "@/components/cards/QuestionCard";
 import HomeFilter from "@/components/filter/HomeFilter";
 import LocalSearch from "@/components/search/LocalSearch";
 import { Button } from "@/components/ui/button";
 import ROUTES from "@/constants/routes";
-import handleError from "@/lib/handlers/error";
-import { ValidationError } from "@/lib/htpp-error";
+// import handleError from "@/lib/handlers/error";
+// import { ValidationError } from "@/lib/htpp-error";
 
   const questions = [
     {_id: "1", title: "How to learn Next.js?", description: "I am new to Next.js and would like to know the best resources to learn it.", 
       tags: [ {_id: "1", name: "Next.js" }, { _id: "2", name: "JavaScript" } ], 
-      author: { _id: "1", name: "John Doe"}, 
-      createdAt: "2024-09-01T12:00:00.000Z",
+      author: { _id: "1", name: "John Doe", image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQSO0VubIDlJbtjWF0z5sDK5luQCR5niFDyyQ&s"}, 
+      createdAt: new Date("2026-03-01T12:00:00.000Z"),
       upvotes: 10,
       answers: 5,
       views: 100,
@@ -19,29 +20,29 @@ import { ValidationError } from "@/lib/htpp-error";
     {_id: "2", title: "What is the best way to deploy a Next.js app?", 
       description: "I want to deploy my Next.js app and need guidance on the best practices.", 
       tags: [ {_id: "3", name: "Deployment" }, ], 
-      author: { _id: "2", name: "Jane Smith"}, 
-      createdAt: "2024-09-02T12:00:00.000Z",
+      author: { _id: "2", name: "Jane Smith", image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQSO0VubIDlJbtjWF0z5sDK5luQCR5niFDyyQ&s"}, 
+      createdAt: new Date("2024-09-02T12:00:00.000Z"),
       upvotes: 5,
       answers: 2,
       views: 50,
     },
     {_id: "3", title: "How to use Next.js with TypeScript?", description: "I am interested in using TypeScript with Next.js and need help getting started.", tags: [ {_id: "4", name: "TypeScript" }, { _id: "1", name: "Next.js" } ], 
-      author: { _id: "3", name: "Alice Johnson"}, 
-      createdAt: "2024-09-03T12:00:00.000Z",
+      author: { _id: "3", name: "Alice Johnson", image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQSO0VubIDlJbtjWF0z5sDK5luQCR5niFDyyQ&s"}, 
+      createdAt: new Date("2024-09-03T12:00:00.000Z"),
       upvotes: 8,
       answers: 3,
       views: 75,
     },
     {_id: "4", title: "What are the benefits of using Next.js?", description: "I would like to know the advantages of using Next.js for my projects.", tags: [ {_id: "1", name: "Next.js" }, { _id: "5", name: "Benefits" } ], 
-      author: { _id: "4", name: "Bob Brown"}, 
-      createdAt: "2024-09-04T12:00:00.000Z",
+      author: { _id: "4", name: "Bob Brown", image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQSO0VubIDlJbtjWF0z5sDK5luQCR5niFDyyQ&s"}, 
+      createdAt: new Date("2024-09-04T12:00:00.000Z"),
       upvotes: 12,
       answers: 4,
       views: 90,
     },
     {_id: "5", title: "How to optimize performance in Next.js?", description: "I need tips on improving the performance of my Next.js application.", tags: [ {_id: "6", name: "Performance" }, { _id: "1", name: "Next.js" } ], 
-      author: { _id: "5", name: "Charlie Davis"}, 
-      createdAt: "2024-09-05T12:00:00.000Z",
+      author: { _id: "5", name: "Charlie Davis", image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQSO0VubIDlJbtjWF0z5sDK5luQCR5niFDyyQ&s"}, 
+      createdAt: new Date("2024-09-05T12:00:00.000Z"),
       upvotes: 10,
       answers: 5,
       views: 100,
@@ -52,16 +53,16 @@ import { ValidationError } from "@/lib/htpp-error";
     searchParams: Promise<{[key: string]: string}>;
   }
 
-  const test = async () => {
-    try {
-      throw new ValidationError({
-        title: ["Required"],
-        tags: ['"JavaScript is not a valid tag."']
-      })
-    } catch (err) {
-      return handleError(err);
-    }
-  }
+  // const test = async () => {
+  //   try {
+  //     throw new ValidationError({
+  //       title: ["Required"],
+  //       tags: ['"JavaScript is not a valid tag."']
+  //     })
+  //   } catch (err) {
+  //     return handleError(err);
+  //   }
+  // }
 
 const Home = async ({ searchParams }: SearchParams ) => {
   // test()
@@ -96,18 +97,7 @@ const Home = async ({ searchParams }: SearchParams ) => {
       <HomeFilter />
       <div className="mt-10 flex w-full flex-col gap-6">
         {filteredQuestions.map((question) => (
-          <div key={question._id} className="rounded-lg border p-4">
-            <h2 className="text-lg font-semibold">{question.title}</h2>
-            <p className="text-sm text-gray-600">{question.description}</p>
-            <div className="mt-2 flex items-center gap-2">
-              {question.tags.map(tag => (
-                <span key={tag._id} className="rounded-full bg-gray-200 px-2 py-1 text-xs font-medium text-black">{tag.name}</span>
-              ))}
-            </div>
-            <div className="mt-4 text-sm text-gray-500">
-              Asked by {question.author.name} on {new Date(question.createdAt).toLocaleDateString()}
-            </div>
-          </div>
+          <QuestionCard key={question._id} question={question} />
         ))}
       </div>
     </>
