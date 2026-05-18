@@ -5,7 +5,8 @@ import HomeFilter from "@/components/filter/HomeFilter";
 import LocalSearch from "@/components/search/LocalSearch";
 import { Button } from "@/components/ui/button";
 import ROUTES from "@/constants/routes";
-// import handleError from "@/lib/handlers/error";
+import { api } from "@/lib/api";
+import handleError from "@/lib/handlers/error";
 // import { ValidationError } from "@/lib/htpp-error";
 
   const questions = [
@@ -53,19 +54,17 @@ import ROUTES from "@/constants/routes";
     searchParams: Promise<{[key: string]: string}>;
   }
 
-  // const test = async () => {
-  //   try {
-  //     throw new ValidationError({
-  //       title: ["Required"],
-  //       tags: ['"JavaScript is not a valid tag."']
-  //     })
-  //   } catch (err) {
-  //     return handleError(err);
-  //   }
-  // }
+  const test = async () => {
+    try {
+      return await api.users.getAll();
+      } catch (err) {
+      return handleError(err);
+    }
+  }
 
 const Home = async ({ searchParams }: SearchParams ) => {
-  // test()
+  const user = await test();
+  console.log("User from API:", user);
 
   const { query = "", filter = "" } = await searchParams;
 
