@@ -1,9 +1,10 @@
 import { NextResponse } from "next/server";
+import { z } from "zod";
 
 import User from "@/app/database/user.model";
 import { APIErrorResponse } from "@/global";
 import handleError from "@/lib/handlers/error";
-import { NotFoundError } from "@/lib/htpp-error";
+import { NotFoundError, ValidationError } from "@/lib/htpp-error";
 import dbConnect from "@/lib/mongoose";
 import { UserSchema } from "@/lib/validations";
 
@@ -21,7 +22,7 @@ export async function GET(_: Request, { params }: { params: Promise<{ id: string
 
     return NextResponse.json({ success: true, data: user }, { status: 200 }); 
   } catch (error) {
-    handleError(error, "api") as APIErrorResponse;
+    return handleError(error, "api") as APIErrorResponse;
   }
 }
 
@@ -38,7 +39,7 @@ export async function DELETE(_: Request, { params } : { params: Promise< {id: st
 
     return NextResponse.json({ success: true, data: user }, { status: 200 });
   } catch (error) {
-    handleError(error, "api") as APIErrorResponse;
+    return handleError(error, "api") as APIErrorResponse;
   }
 }
 
@@ -52,14 +53,18 @@ export async function PUT(request: Request, { params }: { params: Promise<{ id: 
 
     const body = await request.json();
 
-    const validatedData = UserSchema.partial().parse(body);
+    const validatedData = UserSchema.partial().safeParse(body);
 
-    const updatedUser = await User.findByIdAndUpdate(id, validatedData, { new: true });
+    if (!validatedData.success) {
+      throw new ValidationError(z.flattenError(validatedData.error).fieldErrors);
+    }
+
+    const updatedUser = await User.findByIdAndUpdate(id, validatedData.data, { new: true });
 
     if (!updatedUser) throw new NotFoundError("User");
 
     return NextResponse.json({ success: true, data: updatedUser }, { status: 200 });
   } catch (error) {
-    handleError(error, "api") as APIErrorResponse;
+    return handleError(error, "api") as APIErrorResponse;
   }
 }

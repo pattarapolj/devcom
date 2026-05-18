@@ -1,5 +1,7 @@
 import { z } from "zod";
 
+import { auth } from "@/auth";
+
 export const SignInSchema = z.object({
   email: z
     .string()
@@ -66,12 +68,48 @@ export const AskQuestionSchema = z.object({
 })
 
 export const UserSchema = z.object({
-    name: z.string({ error: (issue) => issue.input === undefined? "Required" : undefined }).min(1, { message: "Name is required" }),
-    username: z.string({ error: (issue) => issue.input === undefined? "Required" : undefined }).min(3, { message: "Username must be atleast 3 characters long" }),
-    email: z.string({ error: (issue) => issue.input === undefined? "Required" : undefined }).email({ message: "Please provide a valid email address" }),
-    bio: z.string().max(160, { message: "Bio cannot exceed 160 characters" }).optional(),
-    image: z.url({ message: "Please provide a valid URL for the image" }).optional(),
-    location: z.string().max(100, { message: "Location cannot exceed 100 characters" }).optional(),
-    portfolio: z.url({ message: "Please provide a valid URL for the portfolio" }).optional(),
-    reputation: z.number().optional(),
+    name: z
+        .string({ error: (issue) => issue.input === undefined? "Required" : undefined }).min(1, { message: "Name is required" }),
+    username: z
+        .string({ error: (issue) => issue.input === undefined? "Required" : undefined }).min(3, { message: "Username must be atleast 3 characters long" }),
+    email: z
+        .string({ error: (issue) => issue.input === undefined? "Required" : undefined }).email({ message: "Please provide a valid email address" }),
+    bio: z
+        .string().max(160, { message: "Bio cannot exceed 160 characters" }).optional(),
+    image: z
+        .url({ message: "Please provide a valid URL for the image" }).optional(),
+    location: z
+        .string().max(100, { message: "Location cannot exceed 100 characters" }).optional(),
+    portfolio: z
+        .url({ message: "Please provide a valid URL for the portfolio" }).optional(),
+    reputation: z
+        .number().optional(),
 })
+
+export const AccountSchema = z.object({
+    userId: z
+        .string({ error: (issue) => issue.input === undefined? "Required" : undefined }).min(1, { message: "User ID is required" }),
+    name: z
+        .string({ error: (issue) => issue.input === undefined? "Required": undefined }).min(1, { message: "Name is required" }),
+    image: z
+        .url({ message: "Please provide a valid URL for the image" }).optional(),
+    password: z
+        .string()
+        .min(6, { message: "Password must be at least 6 characters long." })
+        .max(100, { message: "Password cannot exceed 100 characters." })
+        .regex(/[A-Z]/, {
+            message: "Password must contain at least one uppercase letter.",
+        })  
+        .regex(/[a-z]/, {
+            message: "Password must contain at least one lowercase letter.",
+        })
+        .regex(/[0-9]/, { message: "Password must contain at least one number." })
+        .regex(/[^a-zA-Z0-9]/, {
+            message: "Password must contain at least one special character.",
+    }).optional(),
+    authProvider: z
+        .string({ error: (issue) => issue.input === undefined? "Required" : undefined }).min(1, { message: "Auth provider is required" }),
+    authProviderId: z
+    .string({ error: (issue) => issue.input === undefined? "Required" : undefined }).min(1, { message: "Auth provider ID is required" }),
+})
+    
