@@ -1,13 +1,13 @@
 import { NextResponse } from "next/server";
 import { z } from "zod";
 
+import User from "@/app/database/user.model";
+import { APIErrorResponse } from "@/global";
 import handleError from "@/lib/handlers/error";
 import { ValidationError } from "@/lib/htpp-error";
 import dbConnect from "@/lib/mongoose";
 import { UserSchema } from "@/lib/validations";
 
-import { APIErrorResponse } from "@/global";
-import User from "@/app/database/user.model";
 
 
 
@@ -34,7 +34,7 @@ export async function POST(request: Request) {
 
     const validatedData = UserSchema.safeParse(body);
 
-    if(validatedData.error) {
+    if(!validatedData.success) {
       throw new ValidationError(z.flattenError(validatedData.error).fieldErrors);
     }
 
