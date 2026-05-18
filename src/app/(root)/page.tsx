@@ -1,5 +1,6 @@
 import Link from "next/link";
 
+import { auth } from "@/auth";
 import QuestionCard from "@/components/cards/QuestionCard";
 import HomeFilter from "@/components/filter/HomeFilter";
 import LocalSearch from "@/components/search/LocalSearch";
@@ -54,17 +55,10 @@ import handleError from "@/lib/handlers/error";
     searchParams: Promise<{[key: string]: string}>;
   }
 
-  const test = async () => {
-    try {
-      return await api.users.getAll();
-      } catch (err) {
-      return handleError(err);
-    }
-  }
-
 const Home = async ({ searchParams }: SearchParams ) => {
-  const user = await test();
-  console.log("User from API:", user);
+  // const session = await auth();
+
+  // console.log("Session:", session);
 
   const { query = "", filter = "" } = await searchParams;
 

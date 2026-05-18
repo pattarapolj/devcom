@@ -19,14 +19,11 @@ export async function POST(request: Request) {
     if (!validatedData.success) {
       throw new ValidationError(z.flattenError(validatedData.error).fieldErrors);
     }
-
-    const account = await Account.findOne({ authProviderId: validatedData.data.authProviderId });
+    const account = await Account.findOne({ authProviderId });
 
     if (!account) throw new NotFoundError("Account");
 
     return NextResponse.json({ success: true, data: account }, { status: 200 });
-
-
 
   } catch (error) {
     return handleError(error, "api") as APIErrorResponse;

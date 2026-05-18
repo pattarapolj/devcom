@@ -112,4 +112,18 @@ export const AccountSchema = z.object({
     authProviderId: z
     .string({ error: (issue) => issue.input === undefined? "Required" : undefined }).min(1, { message: "Auth provider ID is required" }),
 })
-    
+
+export const SignInWithOAuthSchema = z.object({
+    authProvider: z
+        .string({ error: (issue) => issue.input === undefined? "Required" : undefined }).min(1, { message: "Auth provider is required" }),
+    authProviderId: z
+    .string({ error: (issue) => issue.input === undefined? "Required" : undefined }).min(1, { message: "Auth provider ID is required" }),
+    user: z.object({
+        name: z
+            .string({ error: (issue) => issue.input === undefined? "Required" : undefined }).min(1, { message: "Name is required" }),
+        username: z
+            .string({ error: (issue) => issue.input === undefined? "Required" : undefined }).min(3, { message: "Username must be atleast 3 characters long" }),
+        email: z.email({ message: "Please provide a valid email address" }),
+        image: z.url({ message: "Please provide a valid URL for the image" }).optional(),
+    })
+})
