@@ -8,7 +8,14 @@ import { IAccountDoc } from "./app/database/account.model";
 import { api } from "./lib/api";
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
-    providers: [GitHub, Google],
+    secret: process.env.AUTH_SECRET,
+    providers: [GitHub({
+        clientId: process.env.AUTH_GITHUB_ID!,
+        clientSecret: process.env.AUTH_GITHUB_SECRET!,
+    }), Google({
+        clientId: process.env.AUTH_GOOGLE_ID!,
+        clientSecret: process.env.AUTH_GOOGLE_SECRET!,
+    })],
     callbacks: {
         async session({ session, token }) {
             session.user.id = token.sub as string;
