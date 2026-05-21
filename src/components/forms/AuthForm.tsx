@@ -3,8 +3,9 @@
 
 import { zodResolver } from "@hookform/resolvers/zod"
 import Link from "next/link"
+import { useRouter } from "next/navigation"
 import { DefaultValues, FieldValues, Path, SubmitHandler, useForm } from "react-hook-form"
-import { z, ZodType } from "zod"
+import { ZodType } from "zod"
 
 import { Button } from "@/components/ui/button"
 import {
@@ -17,11 +18,13 @@ import {
 } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
 import ROUTES from "@/constants/routes"
+import { ActionResponse } from "@/global"
+import { toast } from "@/hooks/use-toast"
 
 interface AuthFormProps<T extends FieldValues> {
     schema: ZodType<T>
     defaultValues: T,
-    onSubmit: (data: T) => Promise<{ success: boolean }>,
+    onSubmit: (data: T) => Promise<ActionResponse<T>>,
     formType: "SIGN_IN" | "SIGN_UP"
 }
 
@@ -32,20 +35,38 @@ const AuthForm = <T extends FieldValues> ({
         formType,
     }: AuthFormProps<T>) => {
 
-    const form = useForm<z.infer<typeof schema>>({
-        resolver: zodResolver(schema),
+    const router = useRouter();
+
+    const form = useForm<T>({
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        resolver: zodResolver(schema as any),
         defaultValues: defaultValues as DefaultValues<T>
     })
 
-    const handleSubmit: SubmitHandler<T> = async () => {
-        // TODO: Authenticate User
+    const handleSubmit: SubmitHandler<T> = async (data) => {
+        const result = (await onSubmit(data)) as unknown as ActionResponse;
+        if (result?.success) {
+            toast({
+                title: 'Success',
+                description: formType === "SIGN_IN"
+                ? "You have successfully signed in!"
+                : "Your account has been created successfully!",
+            })
+            router.push(ROUTES.HOME);
+        } else {
+        toast({ 
+            title: `Error ${result?.status}`,
+            description: result?.error?.message,
+            variant: "destructive"
+        })
     }
 
+    } 
     const buttonText = formType === "SIGN_IN" ? "Sign In" : "Sign Up"
 
     return (
         <Form {...form}>
-            <form onSubmit={form.handleSubmit(onSubmit)} className="mt-10 space-y-6">
+            <form onSubmit={form.handleSubmit(handleSubmit)} className="mt-10 space-y-6">
                 {Object.keys(defaultValues).map((field) => (
                     <FormField
                         key={field}

@@ -37,9 +37,10 @@ async function action<T>({ params, schema, authorize = false }: ActionOptions<T>
     if(!session) {
       return new UnauthorizedError();
     }
-    await dbConnect();
   }
-
+  
+  await dbConnect();
+  
   return { params, session };
 }
 
