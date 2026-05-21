@@ -7,7 +7,7 @@ export class RequestError extends Error {
     message: string,
     errors?: Record<string, string[]>
   ) {
-    super(message); // call parent class
+    super(message);
     this.statusCode = statusCode;
     this.errors = errors;
     this.name = "RequestError";
