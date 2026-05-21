@@ -24,7 +24,7 @@ import { toast } from "@/hooks/use-toast"
 interface AuthFormProps<T extends FieldValues> {
     schema: ZodType<T>
     defaultValues: T,
-    onSubmit: (data: T) => Promise<ActionResponse<T>>,
+    onSubmit: (data: T) => Promise<ActionResponse>,
     formType: "SIGN_IN" | "SIGN_UP"
 }
 
@@ -44,7 +44,7 @@ const AuthForm = <T extends FieldValues> ({
     })
 
     const handleSubmit: SubmitHandler<T> = async (data) => {
-        const result = (await onSubmit(data)) as unknown as ActionResponse;
+        const result = (await onSubmit(data)) as ActionResponse;
         if (result?.success) {
             toast({
                 title: 'Success',

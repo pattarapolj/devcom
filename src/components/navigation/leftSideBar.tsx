@@ -1,4 +1,4 @@
-import Image from "next/image"
+import { LogOut } from "lucide-react"
 import Link from "next/link"
 
 import { auth, signOut } from "@/auth";
@@ -9,23 +9,23 @@ import NavLinks from "./navbar/navLinks"
 
 const LeftSideBar = async () => {
     const session = await auth();
+    const userId = session?.user?.id;
+
 return (
     <section className="custom-scrollbar background-light900_dark200 light-border sticky left-0 top-0 flex h-screen flex-col justify-between overflow-y-auto border-r p-6 pt-36 shadow-light-300 dark:shadow-none max-sm:hidden lg:w-[266px]">
         <div className="flex flex-1 flex-col gap-6">
-            <NavLinks />
+            <NavLinks userId={userId}/>
         </div>
         
         <div className="flex flex-col gap-3">
-            {session?.user 
+            {userId 
             ? (<>
                 <form className="px-10" action={async() => {
                     "use server";
-                    await signOut({
-                        redirectTo: ROUTES.SIGN_IN,
-                        });
+                    await signOut();
                     }}>
                     <Button className='small-medium btn-secondary text-dark200_light900 min-h-[41px] w-full rounded-lg px-4 py-3' type="submit">
-                        <Image src="/icons/door.svg" alt="Door Icon" width={20} height={20} className="dark:invert" />Log out
+                        <LogOut className="size-5 text-black dark:text-white" /><span className="text-dark300_light900 max-lg:hidden">Log out</span>
                     </Button>
 
                 </form>

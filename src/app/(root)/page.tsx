@@ -1,14 +1,10 @@
 import Link from "next/link";
 
-import { auth } from "@/auth";
 import QuestionCard from "@/components/cards/QuestionCard";
 import HomeFilter from "@/components/filter/HomeFilter";
 import LocalSearch from "@/components/search/LocalSearch";
 import { Button } from "@/components/ui/button";
 import ROUTES from "@/constants/routes";
-import { api } from "@/lib/api";
-import handleError from "@/lib/handlers/error";
-// import { ValidationError } from "@/lib/htpp-error";
 
   const questions = [
     {_id: "1", title: "How to learn Next.js?", description: "I am new to Next.js and would like to know the best resources to learn it.", 
@@ -56,10 +52,6 @@ import handleError from "@/lib/handlers/error";
   }
 
 const Home = async ({ searchParams }: SearchParams ) => {
-  // const session = await auth();
-
-  // console.log("Session:", session);
-
   const { query = "", filter = "" } = await searchParams;
 
   const filteredQuestions = questions.filter((

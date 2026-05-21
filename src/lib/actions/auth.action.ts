@@ -11,7 +11,8 @@ import { ActionResponse, ErrorResponse } from '@/global';
 
 import actionHandler from '../handlers/action';
 import handleError from '../handlers/error';
-import { SignUpSchema } from '../validations';
+import { NotFoundError } from '../htpp-error';
+import { SignInSchema, SignUpSchema } from '../validations';
 
 
 export async function signUpWithCredentials(params: AuthCredentials): Promise<ActionResponse> {
@@ -59,5 +60,42 @@ export async function signUpWithCredentials(params: AuthCredentials): Promise<Ac
     session.endSession();
   }
 
+
+}
+
+export async function signInWithCredentials(params: Pick<AuthCredentials, 'email' | 'password'>): Promise<ActionResponse> {
+
+  console.log('Signing in with credentials:', params);
+
+  const validationResult = await actionHandler({ params, schema: SignInSchema });
+
+  if (validationResult instanceof Error) {
+    return handleError(validationResult) as ErrorResponse;
+  }
+
+  const { email, password } = validationResult.params!;
+
+  
+
+  try {
+    const existingUser = await User.findOne({ email });
+
+    if (!existingUser) throw new NotFoundError("User");
+    
+
+    const existingAccount = await Account.findOne({ authProvider: 'credentials', authProviderId: email });
+    if (!existingAccount) throw new NotFoundError("Account");
+    
+    const passwordMatch = await bcrypt.compare(password, existingAccount.password!);
+
+    if (!passwordMatch) throw new Error("Invalid credentials");
+
+    await signIn('credentials', { email, password,  redirect: false });
+
+    return { success: true };
+
+  } catch (error) {
+    return handleError(error) as ErrorResponse;
+  }
 
 }
