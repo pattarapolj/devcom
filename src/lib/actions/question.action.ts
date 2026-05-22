@@ -170,10 +170,6 @@ export async function getQuestion(params: GetQuestionParams): Promise<ActionResp
     
     const { questionId } = validationResult.params!;
 
-    const session = await mongoose.startSession();
-
-    await session.startTransaction();
-
     try {
         const question = await Question.findById(questionId).populate("tags");
 
@@ -182,10 +178,7 @@ export async function getQuestion(params: GetQuestionParams): Promise<ActionResp
         return { success: true, data: JSON.parse(JSON.stringify(question)) };
 
     } catch (error) {
-        await session.abortTransaction();
         return handleError(error) as ErrorResponse;
-    } finally {
-        await session.endSession();
     }
 }
 
