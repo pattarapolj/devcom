@@ -59,6 +59,21 @@
     "Liberation Mono", "Courier New", monospace;
 
   color: var(--baseText);
-  --basePageBg: rgb(25, 25, 36);
+  --basePageBg: black;
   background: var(--basePageBg);
+}
+
+.dark .dark-editor li > code > span {
+  color: orange;
+  background-color: #242128;
+}
+
+.dark .dark-editor :not(pre) > code::before {
+  margin-right: 0.1rem;
+  color: orange;
+}
+
+.dark .dark-editor :not(pre) > code::after {
+  margin-left: 0.1rem;
+  color: orange;
 }

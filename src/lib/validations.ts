@@ -1,7 +1,5 @@
 import { z } from "zod";
 
-import { auth } from "@/auth";
-
 export const SignInSchema = z.object({
   email: z
     .string()
@@ -126,4 +124,20 @@ export const SignInWithOAuthSchema = z.object({
         email: z.email({ message: "Please provide a valid email address" }),
         image: z.url({ message: "Please provide a valid URL for the image" }).optional(),
     })
+})
+
+export const EditQuestionSchema = AskQuestionSchema.extend({
+    questionId: z.string({ error: (issue) => issue.input === undefined? "Required" : undefined }).min(1, { message: "Question ID is required" }),
+})
+
+export const GetQuestionSchema = z.object({
+    questionId: z.string({ error: (issue) => issue.input === undefined? "Required" : undefined }).min(1, { message: "Question ID is required" }),
+})
+
+export const PaginatedSearchSchema = z.object({
+    page: z.number().int().positive().optional(),
+    pageSize: z.number().int().positive().default(10),
+    query: z.string().optional(),
+    filter: z.string().optional(),
+    sort: z.string().optional(),
 })

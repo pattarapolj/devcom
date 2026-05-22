@@ -15,7 +15,8 @@ return  techMap[normalizeTechName]
         : `devicon-devicon-plain`;
 }
 
-export const getTimeStamp = (date: Date): string => {
+export const getTimeStamp = (createdAt: Date): string => {
+    const date = new Date(createdAt);
     const seconds = Math.round((Date.now() - new Date(date).getTime()) / 1000);
 
     if (seconds < 0) return "just now";

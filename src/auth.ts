@@ -4,8 +4,6 @@ import Credentials from "next-auth/providers/credentials"
 import GitHub from "next-auth/providers/github"
 import Google from "next-auth/providers/google"
 
-import { ActionResponse } from "@/global";
-
 import { IAccountDoc } from "./app/database/account.model";
 import { IUserDoc } from "./app/database/user.model";
 import { api } from "./lib/api";

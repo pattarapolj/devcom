@@ -22,7 +22,7 @@ return (
             ? (<>
                 <form className="px-10" action={async() => {
                     "use server";
-                    await signOut();
+                    await signOut({ redirectTo: ROUTES.SIGN_IN, redirect: true });
                     }}>
                     <Button className='small-medium btn-secondary text-dark200_light900 min-h-[41px] w-full rounded-lg px-4 py-3' type="submit">
                         <LogOut className="size-5 text-black dark:text-white" /><span className="text-dark300_light900 max-lg:hidden">Log out</span>

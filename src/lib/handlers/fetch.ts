@@ -1,5 +1,3 @@
-import { ActionResponse } from "@/global";
-
 import logger from "../logger";
 import handleError from "./error";
 import { RequestError } from "../htpp-error";

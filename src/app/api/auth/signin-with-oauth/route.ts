@@ -5,7 +5,6 @@ import { z } from "zod";
 
 import Account from "@/app/database/account.model";
 import User from "@/app/database/user.model";
-import { APIErrorResponse } from "@/global";
 import handleError from "@/lib/handlers/error";
 import { ValidationError } from "@/lib/htpp-error";
 import dbConnect from "@/lib/mongoose";
@@ -57,6 +56,6 @@ export async function POST(request: Request) {
     await session.abortTransaction(); // Rollback the transaction in case of any error
     return handleError(error, "api") as APIErrorResponse;
   } finally {
-    session.endSession();
+    await session.endSession();
   }
 }

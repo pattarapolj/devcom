@@ -3,11 +3,9 @@
 import bcrypt from 'bcryptjs';
 import mongoose from 'mongoose';
 
-import { AuthCredentials } from '@/action';
 import Account from '@/app/database/account.model';
 import User from '@/app/database/user.model';
 import { signIn } from '@/auth';
-import { ActionResponse, ErrorResponse } from '@/global';
 
 import actionHandler from '../handlers/action';
 import handleError from '../handlers/error';
@@ -54,10 +52,10 @@ export async function signUpWithCredentials(params: AuthCredentials): Promise<Ac
     return { success: true };
 
   } catch (error) {
-    session.abortTransaction();
+    await session.abortTransaction();
     return handleError(error) as ErrorResponse;
   } finally {
-    session.endSession();
+    await session.endSession();
   }
 
 
