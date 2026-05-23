@@ -50,3 +50,11 @@ export const getTimeStamp = (createdAt: Date): string => {
 
     return "just now";
 };
+
+export const formatNumber = (number: number): string => {
+    if (number >= 1e6)
+        return (number / 1e6).toFixed(1).replace(/\.0$/, "") + "M";
+    if (number >= 1e3)
+        return (number / 1e3).toFixed(1).replace(/\.0$/, "") + "K";
+    return number.toString();
+};
