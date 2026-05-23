@@ -1,13 +1,18 @@
-"use client"
+"use client";
 
+import { zodResolver } from "@hookform/resolvers/zod";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
+import {
+    DefaultValues,
+    FieldValues,
+    Path,
+    SubmitHandler,
+    useForm,
+} from "react-hook-form";
+import { ZodType } from "zod";
 
-import { zodResolver } from "@hookform/resolvers/zod"
-import Link from "next/link"
-import { useRouter } from "next/navigation"
-import { DefaultValues, FieldValues, Path, SubmitHandler, useForm } from "react-hook-form"
-import { ZodType } from "zod"
-
-import { Button } from "@/components/ui/button"
+import { Button } from "@/components/ui/button";
 import {
     Form,
     FormControl,
@@ -15,58 +20,59 @@ import {
     FormItem,
     FormLabel,
     FormMessage,
-} from "@/components/ui/form"
-import { Input } from "@/components/ui/input"
-import ROUTES from "@/constants/routes"
-import { ActionResponse } from "@/global"
-import { toast } from "@/hooks/use-toast"
+} from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
+import ROUTES from "@/constants/routes";
+import { toast } from "@/hooks/use-toast";
 
 interface AuthFormProps<T extends FieldValues> {
-    schema: ZodType<T>
-    defaultValues: T,
-    onSubmit: (data: T) => Promise<ActionResponse>,
-    formType: "SIGN_IN" | "SIGN_UP"
+    schema: ZodType<T>;
+    defaultValues: T;
+    onSubmit: (data: T) => Promise<ActionResponse>;
+    formType: "SIGN_IN" | "SIGN_UP";
 }
 
-const AuthForm = <T extends FieldValues> ({
-        schema,
-        defaultValues,
-        onSubmit,
-        formType,
-    }: AuthFormProps<T>) => {
-
+const AuthForm = <T extends FieldValues>({
+    schema,
+    defaultValues,
+    onSubmit,
+    formType,
+}: AuthFormProps<T>) => {
     const router = useRouter();
 
     const form = useForm<T>({
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         resolver: zodResolver(schema as any),
-        defaultValues: defaultValues as DefaultValues<T>
-    })
+        defaultValues: defaultValues as DefaultValues<T>,
+    });
 
     const handleSubmit: SubmitHandler<T> = async (data) => {
         const result = (await onSubmit(data)) as ActionResponse;
         if (result?.success) {
             toast({
-                title: 'Success',
-                description: formType === "SIGN_IN"
-                ? "You have successfully signed in!"
-                : "Your account has been created successfully!",
-            })
+                title: "Success",
+                description:
+                    formType === "SIGN_IN"
+                        ? "You have successfully signed in!"
+                        : "Your account has been created successfully!",
+            });
             router.push(ROUTES.HOME);
         } else {
-        toast({ 
-            title: `Error ${result?.status}`,
-            description: result?.error?.message,
-            variant: "destructive"
-        })
-    }
-
-    } 
-    const buttonText = formType === "SIGN_IN" ? "Sign In" : "Sign Up"
+            toast({
+                title: `Error ${result?.status}`,
+                description: result?.error?.message,
+                variant: "destructive",
+            });
+        }
+    };
+    const buttonText = formType === "SIGN_IN" ? "Sign In" : "Sign Up";
 
     return (
         <Form {...form}>
-            <form onSubmit={form.handleSubmit(handleSubmit)} className="mt-10 space-y-6">
+            <form
+                onSubmit={form.handleSubmit(handleSubmit)}
+                className="mt-10 space-y-6"
+            >
                 {Object.keys(defaultValues).map((field) => (
                     <FormField
                         key={field}
@@ -75,17 +81,23 @@ const AuthForm = <T extends FieldValues> ({
                         render={({ field }) => (
                             <FormItem className="flex w-full flex-col gap-2.5">
                                 <FormLabel className="paragraph-medium text-dark400_light700">
-                                    {field.name === "email" 
-                                    ? "Email Address": 
-                                    field.name.charAt(0).toUpperCase() + field.name.slice(1)}
+                                    {field.name === "email"
+                                        ? "Email Address"
+                                        : field.name.charAt(0).toUpperCase() +
+                                          field.name.slice(1)}
                                 </FormLabel>
                                 <FormControl>
                                     <Input
                                         required
-                                        type={field.name === "password" ? "password" : "text"}
+                                        type={
+                                            field.name === "password"
+                                                ? "password"
+                                                : "text"
+                                        }
                                         {...field}
                                         className="paragraph-regular background-light900_dark300 light-border-2 
-                                        text-dark300_light700 no-focus min-h-12 rounded-1.5 border"/>
+                                        text-dark300_light700 no-focus min-h-12 rounded-1.5 border"
+                                    />
                                 </FormControl>
                                 <FormMessage />
                             </FormItem>
@@ -93,42 +105,43 @@ const AuthForm = <T extends FieldValues> ({
                     />
                 ))}
 
-
-                    
-                <Button 
+                <Button
                     disabled={form.formState.isSubmitting}
                     type="submit"
                     className="primary-gradient
                     paragraph-medium min-h-12 w-full rounded-2 px-4 py-3 
                     font-inter !text-light-900"
                 >
-                    {form.formState.isSubmitting 
-                    ? buttonText === "Sign In" ? 
-                    "Signing In..." : 
-                    "Signing Up..." : buttonText}
+                    {form.formState.isSubmitting
+                        ? buttonText === "Sign In"
+                            ? "Signing In..."
+                            : "Signing Up..."
+                        : buttonText}
                 </Button>
                 {formType === "SIGN_IN" ? (
-                    <p>Want to be a part of community?{" "} 
-                        <Link 
+                    <p>
+                        Want to be a part of community?{" "}
+                        <Link
                             href={ROUTES.SIGN_UP}
                             className="paragraph-semibold primary-text-gradient"
                         >
                             Sign in
                         </Link>
-                    </p> ) : (
-                    <p>Already have an account?{" "} 
-                        <Link 
+                    </p>
+                ) : (
+                    <p>
+                        Already have an account?{" "}
+                        <Link
                             href={ROUTES.SIGN_IN}
                             className="paragraph-semibold primary-text-gradient"
                         >
                             Sign in
                         </Link>
-                        </p>
-                    )}
+                    </p>
+                )}
             </form>
         </Form>
-    )
-}
+    );
+};
 
-export default AuthForm
-
+export default AuthForm;
