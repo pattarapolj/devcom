@@ -1,19 +1,19 @@
 interface SignInWithOAuthParams {
-  authProvider: 'google' | 'github';
-  authProviderId: string;
-  user: {
-    name: string;
-    username: string;
-    email: string;
-    image?: string;
-  }
+    authProvider: "google" | "github";
+    authProviderId: string;
+    user: {
+        name: string;
+        username: string;
+        email: string;
+        image?: string;
+    };
 }
 
 interface AuthCredentials {
-  name: string;
-  username: string;
-  email: string;
-  password: string;
+    name: string;
+    username: string;
+    email: string;
+    password: string;
 }
 
 interface CreateQuestionParams {
@@ -27,5 +27,9 @@ interface EditQuestionParams extends CreateQuestionParams {
 }
 
 interface GetQuestionParams {
-  questionId: string;
+    questionId: string;
+}
+
+interface GetTagQuestionsParams extends Omit<PaginatedSearchParams, "filter"> {
+    tagId: string;
 }
