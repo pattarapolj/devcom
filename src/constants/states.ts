@@ -26,3 +26,12 @@ export const EMPTY_QUESTIONS = {
     href: ROUTES.ASK_QUESTION
   }
 }
+
+export const EMPTY_TAGS = {
+  title: "No tags in sight!",
+  message: "It seems like there are no tags here. Tags help categorize questions and make them easier to find. Start by creating some tags to organize the content!",
+  button: {
+    text: "Create a Tag",
+    href: ROUTES.TAGS
+  }
+}

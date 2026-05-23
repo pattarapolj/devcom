@@ -44,7 +44,7 @@ const Home = async ({ searchParams }: SearchParams) => {
                 />
             </section>
             <HomeFilter />
-            <DataRenderer 
+            <DataRenderer
                 success={success}
                 error={error}
                 data={questions}
@@ -52,8 +52,10 @@ const Home = async ({ searchParams }: SearchParams) => {
                 render={(questions) => (
                     <div className="mt-10 flex w-full flex-col gap-6">
                         {questions.map((question) => (
-                                <QuestionCard key={question._id.toString()} question={question}/>
-                            
+                            <QuestionCard
+                                key={question._id.toString()}
+                                question={question}
+                            />
                         ))}
                     </div>
                 )}
