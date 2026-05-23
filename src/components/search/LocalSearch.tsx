@@ -34,6 +34,7 @@ const LocalSearch = ({
     useEffect(() => {
         const delayDebounce = setTimeout(() => {
             // Update the search query in the URL when it changes
+            console.log("pathName: ", pathname, "route: ", route);
             if (searchQuery) {
                 const newUrl = formUrlQuery({
                     params: searchParamsStr,

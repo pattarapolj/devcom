@@ -37,7 +37,7 @@ const TagsPage = async ({ searchParams }: RouteParams) => {
                 data={tags}
                 empty={EMPTY_TAGS}
                 render={(tags) => (
-                    <div className="mt-10 flex flex-wrap w-full gap-6 justify-center">
+                    <div className="mt-10 flex flex-wrap w-full gap-6">
                         {tags.map((tag) => (
                             <TagCard key={tag._id} {...tag} />
                         ))}
