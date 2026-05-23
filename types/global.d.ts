@@ -42,7 +42,7 @@ interface RouteParams {
     searchParams: Promise<Record<string, string>>;
 }
 
-interface paginatedSearchParams {
+interface PaginatedSearchParams {
     page?: number;
     pageSize?: number;
     query?: string;

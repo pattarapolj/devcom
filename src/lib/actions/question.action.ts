@@ -182,7 +182,7 @@ export async function getQuestion(params: GetQuestionParams): Promise<ActionResp
     }
 }
 
-export async function getQuestions(params: paginatedSearchParams): Promise<ActionResponse<{ questions: Question[]; isNext: boolean }>> {
+export async function getQuestions(params: PaginatedSearchParams): Promise<ActionResponse<{ questions: Question[]; isNext: boolean }>> {
     const validationResult = await action({ params, schema: PaginatedSearchSchema });
 
     if (validationResult instanceof Error) return handleError(validationResult) as ErrorResponse;
@@ -222,6 +222,7 @@ export async function getQuestions(params: paginatedSearchParams): Promise<Actio
     }
 
     try {
+        // throw new Error("Hello Worlds");
         const totalQuestions = await Question.countDocuments(filterQuery);
         const questions = await Question.find(filterQuery)
         .populate("tags", "name")
