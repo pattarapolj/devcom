@@ -289,3 +289,12 @@ export const HasVotedSchema = CreateVoteSchema.pick({
     targetId: true,
     targetType: true,
 });
+
+export const CollectionBaseSchema = z.object({
+    questionId: z
+        .string({
+            error: (issue) =>
+                issue.input === undefined ? "Required" : undefined, // Just added this to provide a clearer error message when questionId is missing and min(1) to ensure it's not an empty string
+        })
+        .min(1, { message: "Question ID is required" }),
+});

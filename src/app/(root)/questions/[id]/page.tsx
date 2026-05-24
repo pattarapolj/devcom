@@ -72,6 +72,9 @@ const QuestionDetails = async ({ params }: RouteParams) => {
                                 hasVotedPromise={hasVotedPromise}
                             />
                         </Suspense>
+                        <Suspense fallback={<div>Loading...</div>}>
+                            <SaveQuestion questionId={question._id} />
+                        </Suspense>
                     </div>
                 </div>
                 <h2 className="h2-semibold text-dark200_light900 mt-3.5 w-full">
