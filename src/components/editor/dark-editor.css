@@ -64,17 +64,7 @@
     background: var(--basePageBg);
 }
 
-/* .dark .dark-editor li > code > span {
+.dark code {
     color: orange;
-    background-color: #242128;
+    background-color: #131214;
 }
-
-.dark .dark-editor :not(pre) > code::before {
-    margin-right: 0.1rem;
-    color: orange;
-}
-
-.dark .dark-editor :not(pre) > code::after {
-    margin-left: 0.1rem;
-    color: orange;
-} */
