@@ -1,24 +1,24 @@
 interface Tag {
-    _id: string,
-    name: string
+    _id: string;
+    name: string;
 }
 
 interface Author {
-    _id: string,
-    name: string,
-    image: string
+    _id: string;
+    name: string;
+    image: string;
 }
 
 interface Question {
-    _id: string,
-    title: string,
-    content: string,
-    tags: Tag[],
-    author: Author,
-    createdAt: Date,
-    upvotes: number,
-    answers: number,
-    views: number,
+    _id: string;
+    title: string;
+    content: string;
+    tags: Tag[];
+    author: Author;
+    createdAt: Date;
+    upvotes: number;
+    answers: number;
+    views: number;
 }
 
 type ActionResponse<T = null> = {
@@ -29,7 +29,7 @@ type ActionResponse<T = null> = {
         details?: Record<string, string[]>;
     };
     status?: number;
-}
+};
 
 type SuccessResponse<T = null> = ActionResponse<T> & { success: true };
 type ErrorResponse = ActionResponse<undefined> & { success: false };
@@ -48,4 +48,11 @@ interface PaginatedSearchParams {
     query?: string;
     filter?: string;
     sort?: string;
+}
+
+interface Answer {
+    _id: string;
+    author: Author;
+    content: string;
+    createdAt: Date;
 }

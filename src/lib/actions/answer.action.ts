@@ -10,7 +10,7 @@ import ROUTES from "@/constants/routes";
 import action from "../handlers/action";
 import handleError from "../handlers/error";
 import { NotFoundError } from "../htpp-error";
-import { AnswerServerSchema } from "../validations";
+import { AnswerServerSchema, GetAnswerSchema } from "../validations";
 
 export async function createAnswer(
     params: CreateAnswerParams,
@@ -62,5 +62,64 @@ export async function createAnswer(
         return handleError(error) as ErrorResponse;
     } finally {
         await session.endSession();
+    }
+}
+
+export async function getAnswers(
+    params: GetAnswerParams,
+): Promise<
+    ActionResponse<{ answers: Answer[]; isnext: boolean; totalAnswer: number }>
+> {
+    const validationResult = await action({
+        params,
+        schema: GetAnswerSchema,
+    });
+
+    if (validationResult instanceof Error)
+        return handleError(validationResult) as ErrorResponse;
+
+    const { questionId, page = 1, pageSize = 10, filter } = params;
+    const skip = (Number(page) - 1) * Number(pageSize);
+    const limit = Number(pageSize);
+
+    let sortCriteria = {};
+
+    switch (filter) {
+        case "latest":
+            sortCriteria = { createdAt: -1 };
+            break;
+        case "oldest":
+            sortCriteria = { createdAt: 1 };
+            break;
+        case "popular":
+            sortCriteria = { upvotes: -1 };
+            break;
+        default:
+            sortCriteria = { createdAt: -1 };
+            break;
+    }
+
+    try {
+        const totalAnswer = await Answer.countDocuments({
+            question: questionId,
+        });
+        const answers = await Answer.find({ question: questionId })
+            .populate("author", "_id name image")
+            .sort(sortCriteria)
+            .skip(skip)
+            .limit(limit);
+
+        const isNext = skip + answers.length < totalAnswer;
+
+        return {
+            success: true,
+            data: {
+                answers: JSON.parse(JSON.stringify(answers)),
+                isnext: isNext,
+                totalAnswer,
+            },
+        };
+    } catch (error) {
+        return handleError(error) as ErrorResponse;
     }
 }

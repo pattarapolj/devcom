@@ -247,3 +247,12 @@ export const AnswerServerSchema = AnswerSchema.extend({
         })
         .min(1, { message: "Question ID is required" }),
 });
+
+export const GetAnswerSchema = PaginatedSearchSchema.extend({
+    questionId: z
+        .string({
+            error: (issue) =>
+                issue.input === undefined ? "Required" : undefined,
+        })
+        .min(1, { message: "Question ID is required" }),
+});

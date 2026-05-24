@@ -9,6 +9,7 @@ import AnswerForm from "@/components/forms/AnswerForm";
 import Metric from "@/components/Metric";
 import UserAvatar from "@/components/UserAvatar";
 import ROUTES from "@/constants/routes";
+import { getAnswers } from "@/lib/actions/answer.action";
 import { getQuestion, incrementViews } from "@/lib/actions/question.action";
 import { getTimeStamp, formatNumber } from "@/lib/utils";
 
@@ -21,6 +22,19 @@ const QuestionDetails = async ({ params }: RouteParams) => {
     const { success, data: question } = await getQuestion({ questionId: id });
 
     if (!success || !question) return redirect(ROUTES.NOT_FOUND);
+
+    const {
+        success: answerSuccess,
+        data: answerData,
+        error: answerError,
+    } = await getAnswers({
+        questionId: id,
+        page: 1,
+        pageSize: 10,
+        filter: "latest",
+    });
+
+    console.log("Answer Data:", answerData);
 
     const { author, createdAt, answers, views, tags, content } = question;
 
@@ -86,6 +100,8 @@ const QuestionDetails = async ({ params }: RouteParams) => {
                     );
                 })}
             </div>
+
+            <section></section>
 
             <section className="my-5">
                 <AnswerForm questionId={question._id} />
