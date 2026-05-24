@@ -2,7 +2,6 @@ import { NextResponse } from "next/server";
 import { z } from "zod";
 
 import Account from "@/app/database/account.model";
-import { APIErrorResponse } from "@/global";
 import handleError from "@/lib/handlers/error";
 import { NotFoundError, ValidationError } from "@/lib/htpp-error";
 import dbConnect from "@/lib/mongoose";

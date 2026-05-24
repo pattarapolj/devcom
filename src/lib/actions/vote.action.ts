@@ -101,6 +101,15 @@ export async function createVote(
                     {
                         targetId,
                         targetType,
+                        voteType: existingVote.voteType,
+                        change: -1,
+                    },
+                    session,
+                );
+                await updateVoteCount(
+                    {
+                        targetId,
+                        targetType,
                         voteType,
                         change: 1,
                     },
