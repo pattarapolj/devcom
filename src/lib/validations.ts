@@ -256,3 +256,13 @@ export const GetAnswerSchema = PaginatedSearchSchema.extend({
         })
         .min(1, { message: "Question ID is required" }),
 });
+
+export const AIAnswerSchema = z.object({
+    question: z
+        .string()
+        .min(5, { message: "Question must be at least 5 characters long" })
+        .max(200, { message: "Question cannot exceed 200 characters" }),
+    content: z
+        .string()
+        .min(100, { message: "Content must be at least 100 characters long." }),
+});
