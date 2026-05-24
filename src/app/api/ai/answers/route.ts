@@ -8,10 +8,13 @@ import { ValidationError } from "@/lib/htpp-error";
 import { AIAnswerSchema } from "@/lib/validations";
 
 export async function POST(req: Request) {
-    const { question, content } = await req.json();
-
+    const { question, content, userAnswer } = await req.json();
     try {
-        const validationData = AIAnswerSchema.safeParse({ question, content });
+        const validationData = AIAnswerSchema.safeParse({
+            question,
+            content,
+            userAnswer,
+        });
 
         if (!validationData.success) {
             throw new ValidationError(
@@ -19,13 +22,18 @@ export async function POST(req: Request) {
             );
         }
 
+        const prePrompt = `Generate a markdown-formatted response to the following question: "${question}".
+                        Consider the provided context:  **Context:** ${content}   Also, prioritize and incorporate the user's answer when formulating your response: **User's Answer:** ${userAnswer} Prioritize the user's answer only if it's correct. If it's incomplete or incorrect, improve or correct it while keeping the response concise and to the point.   Provide the final answer in markdown format.`;
+        const systemPrompt = `You are a helpful assistant that provides informative responses in markdown format. Use appropriate markdown syntax for headings, lists, code blocks, and emphasis where necessary.
+                            For code blocks, use short-form smaller case language identifiers (e.g., 'js' for JavaScript, 'py' for Python, 'ts' for TypeScript, 'html' for HTML, 'css' for CSS, etc.).`;
+
         const { text } = await generateText({
             model: openai("gpt-4.1-nano"),
-            prompt: `Generate a markdown-formatted response to the following question: ${question} based on the provided content: ${content}`,
-            system: "You are a help assistant for a programming Q&A platform. Your task is to generate clear, concise, and informative answers to users' programming questions based on the content provided. Ensure that your responses are well-structured, easy to understand, and directly address the user's question. Use markdown formatting to enhance readability, including code blocks for any code snippets. Always aim to provide accurate and helpful information to assist users in solving their programming issues. For code blocks use short-form smaller case language identifiers (e.g., js for JavaScript, py for Python, etc.",
+            prompt: prePrompt,
+            system: systemPrompt,
         });
         return NextResponse.json(
-            { success: true, data: { text } },
+            { success: true, data: text },
             { status: 200 },
         );
     } catch (error) {

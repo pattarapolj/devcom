@@ -1,4 +1,3 @@
-import { SignInWithOAuthParams } from "@/action";
 import { IAccount } from "@/app/database/account.model";
 import { IUser } from "@/app/database/user.model";
 import ROUTES from "@/constants/routes";
@@ -67,10 +66,14 @@ export const api = {
             }),
     },
     ai: {
-        getAnswer: (question: string, context: string): APIResponse<string> =>
+        getAnswer: (
+            question: string,
+            content: string,
+            userAnswer?: string,
+        ): APIResponse<string> =>
             fetchHandler(`${apiBaseUrl}/ai/answers`, {
                 method: "POST",
-                body: JSON.stringify({ question, context }),
+                body: JSON.stringify({ question, content, userAnswer }),
             }),
     },
 };

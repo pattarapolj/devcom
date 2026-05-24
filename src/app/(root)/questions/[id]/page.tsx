@@ -35,8 +35,6 @@ const QuestionDetails = async ({ params }: RouteParams) => {
         filter: "latest",
     });
 
-    console.log("Answer Data:", answerData);
-
     const { author, createdAt, answers, views, tags, content } = question;
 
     return (
@@ -112,7 +110,11 @@ const QuestionDetails = async ({ params }: RouteParams) => {
             </section>
 
             <section className="my-5">
-                <AnswerForm questionId={question._id} />
+                <AnswerForm
+                    questionId={question._id}
+                    questionTitle={question.title}
+                    questionContent={question.content}
+                />
             </section>
         </>
     );

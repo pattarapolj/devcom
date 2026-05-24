@@ -30,7 +30,6 @@ import {
 } from "@mdxeditor/editor";
 import { basicDark } from "cm6-theme-basic-dark";
 import { useTheme } from "next-themes";
-import type { ForwardedRef } from "react";
 
 import "@mdxeditor/editor/style.css";
 
@@ -38,11 +37,11 @@ import "@/components/editor/dark-editor.css";
 
 interface Props {
     value: string;
+    editorRef: React.Ref<MDXEditorMethods> | null;
     fieldChange: (value: string) => void;
-    editorRef: ForwardedRef<MDXEditorMethods> | null;
 }
 
-const Editor = ({ value, editorRef, fieldChange, ...props }: Props) => {
+const Editor = ({ value, editorRef, fieldChange }: Props) => {
     const { resolvedTheme } = useTheme();
 
     const theme = resolvedTheme === "dark" ? [basicDark] : [];
@@ -125,7 +124,6 @@ const Editor = ({ value, editorRef, fieldChange, ...props }: Props) => {
                     ),
                 }),
             ]}
-            {...props}
         />
     );
 };
