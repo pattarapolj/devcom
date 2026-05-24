@@ -8,9 +8,9 @@ import action from "../handlers/action";
 import handleError from "../handlers/error";
 import { PaginatedSearchSchema } from "../validations";
 
-export async function GetUser(
+export async function getUsers(
     params: PaginatedSearchParams,
-): Promise<ActionResponse<{ user: User[]; isNext: boolean }>> {
+): Promise<ActionResponse<{ users: User[]; isNext: boolean }>> {
     const validationResult = await action({
         params,
         schema: PaginatedSearchSchema,
@@ -66,12 +66,12 @@ export async function GetUser(
         const isNext = skip + users.length < totalUsers;
 
         if (!users) {
-            return { success: true, data: { user: [], isNext: false } };
+            return { success: true, data: { users: [], isNext: false } };
         }
 
         return {
             success: true,
-            data: { user: JSON.parse(JSON.stringify(users)), isNext },
+            data: { users: JSON.parse(JSON.stringify(users)), isNext },
         };
     } catch (error) {
         return handleError(error) as ErrorResponse;

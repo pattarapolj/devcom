@@ -45,3 +45,13 @@ export const EMPTY_ANSWERS = {
     message:
         "It seems like there are no answers here. Be the first to provide an answer and help the community!",
 };
+
+export const EMPTY_USERS = {
+    title: "No users found!",
+    message:
+        "It seems like there are no users here. Users are the heart of our community. Encourage people to sign up and join the conversation!",
+    button: {
+        text: "Sign Up",
+        href: ROUTES.SIGN_UP,
+    },
+};
