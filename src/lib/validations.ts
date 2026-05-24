@@ -238,3 +238,12 @@ export const AnswerSchema = z.object({
         })
         .min(20, { message: "Content must be at least 20 characters long." }),
 });
+
+export const AnswerServerSchema = AnswerSchema.extend({
+    questionId: z
+        .string({
+            error: (issue) =>
+                issue.input === undefined ? "Required" : undefined,
+        })
+        .min(1, { message: "Question ID is required" }),
+});
