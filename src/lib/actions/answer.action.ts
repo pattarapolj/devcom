@@ -30,6 +30,7 @@ export async function createAnswer(
     const userId = validationResult?.session?.user?.id;
 
     const session = await mongoose.startSession();
+    session.startTransaction();
 
     try {
         const question = await Question.findById(questionId);

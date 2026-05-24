@@ -1,10 +1,12 @@
 "use server";
 
 import mongoose, { ClientSession } from "mongoose";
+import { revalidatePath } from "next/cache";
 
 import Answer from "@/app/database/answer.model";
 import Question from "@/app/database/question.model";
 import Vote from "@/app/database/vote.model";
+import ROUTES from "@/constants/routes";
 
 import action from "../handlers/action";
 import handleError from "../handlers/error";
@@ -36,7 +38,7 @@ export async function updateVoteCount(
         const result = await Model.findByIdAndUpdate(
             targetId,
             { $inc: { [voteField]: change } },
-            { new: true, session },
+            { returnDocument: "after", session },
         );
 
         if (!result) throw new Error(`Failed to update vote count`);
@@ -55,18 +57,17 @@ export async function createVote(
         schema: CreateVoteSchema,
         authorize: true,
     });
-
     if (validationResult instanceof Error) {
-        return handleError(validationResult) as ActionResponse;
+        return handleError(validationResult) as ErrorResponse;
     }
 
     const { targetId, targetType, voteType } = validationResult.params!;
-
     const userId = validationResult.session?.user?.id;
 
     if (!userId) return handleError(new Error("Unauthorized")) as ErrorResponse;
 
     const session = await mongoose.startSession();
+    session.startTransaction();
 
     try {
         const existingVote = await Vote.findOne({
@@ -94,7 +95,7 @@ export async function createVote(
                 await Vote.findByIdAndUpdate(
                     existingVote._id,
                     { voteType },
-                    { new: true, session },
+                    { returnDocument: "after", session },
                 );
                 await updateVoteCount(
                     {
@@ -108,9 +109,17 @@ export async function createVote(
             }
         } else {
             // Create a new vote
-            await Vote.create([{ targetId, targetType, voteType, change: 1 }], {
-                session,
-            });
+            await Vote.create(
+                [
+                    {
+                        author: userId,
+                        actionId: targetId,
+                        actionType: targetType,
+                        voteType,
+                    },
+                ],
+                { session },
+            );
             await updateVoteCount(
                 {
                     targetId,
@@ -121,8 +130,8 @@ export async function createVote(
                 session,
             );
         }
-
         await session.commitTransaction();
+        revalidatePath(ROUTES.QUESTION(targetId));
         return { success: true };
     } catch (error) {
         await session.abortTransaction();

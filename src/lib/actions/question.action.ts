@@ -35,7 +35,7 @@ export async function createQuestion(
 
     const session = await mongoose.startSession();
 
-    await session.startTransaction();
+    session.startTransaction();
 
     try {
         const [question] = await Question.create(
