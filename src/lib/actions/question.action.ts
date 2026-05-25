@@ -8,6 +8,7 @@ import Tag, { ITagDoc } from "@/app/database/tag.model";
 import action from "../handlers/action";
 import handleError from "../handlers/error";
 import { NotFoundError, UnauthorizedError } from "../htpp-error";
+import dbConnect from "../mongoose";
 import {
     AskQuestionSchema,
     EditQuestionSchema,
@@ -306,6 +307,25 @@ export async function incrementViews(
         await question.save();
 
         return { success: true, data: { view: question.views } };
+    } catch (error) {
+        return handleError(error) as ErrorResponse;
+    }
+}
+
+export async function getHotQuestions(): Promise<
+    ActionResponse<{ questions: Question[] }>
+> {
+    try {
+        await dbConnect();
+
+        const questions = await Question.find()
+            .sort({ views: -1, upvotes: -1 })
+            .limit(5);
+
+        return {
+            success: true,
+            data: { questions: JSON.parse(JSON.stringify(questions)) },
+        };
     } catch (error) {
         return handleError(error) as ErrorResponse;
     }

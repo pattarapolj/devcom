@@ -92,7 +92,7 @@ const TagCard = ({
                     />
                 </div>
 
-                <p className="small-regular text-dark500_light700 mt-5 line-clamp-2 w-full">
+                <p className="small-regular text-dark500_light700 mt-5 min-h-[31.2px] line-clamp-2 w-full">
                     {iconDescription}
                 </p>
 
