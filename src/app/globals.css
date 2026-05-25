@@ -380,9 +380,11 @@
 }
 
 .hash-span {
-    margin-top: -140px;
-    padding-bottom: 140px;
+    position: relative;
+    top: -140px;
     display: block;
+    height: 0;
+    pointer-events: none;
 }
 
 .mdxeditor-toolbar {

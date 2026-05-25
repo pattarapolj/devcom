@@ -116,10 +116,6 @@ const AnswerForm = ({ questionId, questionTitle, questionContent }: Props) => {
                 .toString()
                 .trim();
 
-            console.log("Generated AI Answer:", formattedAnswer);
-
-            console.log("Editor Ref:", editorRef.current);
-
             if (editorRef.current) {
                 editorRef.current.setMarkdown(formattedAnswer);
 
