@@ -10,18 +10,20 @@ import TagCard from "../cards/TagCard";
 import DataRenderer from "../DataRenderer";
 
 const RightSideBar = async () => {
-    const { success, data: hotQuestions, error } = await getHotQuestions();
-    const {
-        success: popularTagsSuccess,
-        data: popularTags,
-        error: popularTagsError,
-    } = await getTopTags();
+    const [
+        { success, data: hotQuestions, error },
+        {
+            success: popularTagsSuccess,
+            data: popularTags,
+            error: popularTagsError,
+        },
+    ] = await Promise.all([getHotQuestions(), getTopTags()]);
 
     return (
-        <section className="custom-scrollbar light-border background-light900_dark200 sticky right-0 top-0 flex h-screen w-[350px] flex-col gap-6 overflow-y-auto border-l p-6 pt-36 shadow-light-300 dark:shadow-none max-xl:hidden">
+        <section className="custom-scrollbar light-border background-light900_dark200 sticky right-0 top-0 flex h-screen w-87.5 flex-col gap-6 overflow-y-auto border-l p-6 pt-36 shadow-light-300 dark:shadow-none max-xl:hidden">
             <div>
                 <h3 className="h3-bold text-dark200_light900">Top Question</h3>
-                <div className="mt-7 flex w-full flex-col gap-[30px]">
+                <div className="mt-7 flex w-full flex-col gap-7.5">
                     <DataRenderer
                         success={success}
                         error={error}

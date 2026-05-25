@@ -67,7 +67,7 @@ const StateSkeleton = ({
         </p>
         {button && (
             <Link href={button.href}>
-                <Button className="primary-gradient paragraph-medium mt-5 min-h-[46px] text-light-900">
+                <Button className="primary-gradient paragraph-medium mt-5 min-h-11.5 text-light-900">
                     {button.text}
                 </Button>
             </Link>
@@ -96,7 +96,7 @@ const DataRenderer = <T,>({
                         ? JSON.stringify(error.details, null, 2)
                         : DEFAULT_ERROR.message
                 }
-                button={DEFAULT_ERROR.button}
+                button={empty.button}
             />
         );
     }

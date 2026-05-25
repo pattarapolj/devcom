@@ -167,7 +167,7 @@
 }
 
 @utility h1-bold {
-    @apply text-[30px] font-bold leading-[42px] tracking-tighter;
+    @apply text-[30px] font-bold leading-10.5 tracking-tighter;
 }
 
 @utility h2-bold {
@@ -179,7 +179,7 @@
 }
 
 @utility h3-bold {
-    @apply text-[20px] font-bold leading-[26px];
+    @apply text-[20px] font-bold leading-6.5;
 }
 
 @utility h3-semibold {

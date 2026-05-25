@@ -59,7 +59,7 @@ const QuestionDetails = async ({ params, searchParams }: RouteParams) => {
                             id={author._id}
                             name={author.name}
                             imageUrl={author.image || null}
-                            className="size-[22px]"
+                            className="size-5.5"
                             fallbackClassName="text-[10px]"
                         />
                         <Link href={ROUTES.PROFILE(author._id)}>
