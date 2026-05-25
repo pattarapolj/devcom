@@ -108,7 +108,11 @@ export async function getUser(
 
         return {
             success: true,
-            data: { user, totalQuestions, totalAnswers },
+            data: {
+                user: JSON.parse(JSON.stringify(user)),
+                totalQuestions,
+                totalAnswers,
+            },
         };
     } catch (error) {
         return handleError(error) as ErrorResponse;
