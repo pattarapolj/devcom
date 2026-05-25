@@ -4,7 +4,7 @@ import React from "react";
 
 interface Props {
     imgUrl: string;
-    href: string;
+    href?: string;
     title: string;
 }
 
