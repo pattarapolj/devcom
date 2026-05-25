@@ -79,8 +79,6 @@ export async function signUpWithCredentials(
 export async function signInWithCredentials(
     params: Pick<AuthCredentials, "email" | "password">,
 ): Promise<ActionResponse> {
-    console.log("Signing in with credentials:", params);
-
     const validationResult = await actionHandler({
         params,
         schema: SignInSchema,
